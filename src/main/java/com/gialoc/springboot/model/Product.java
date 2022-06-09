@@ -61,54 +61,6 @@ public class Product {
 		super();
 	}
 	
-	public Product(String name, String image, int categoryid, String short_description, String full_description,
-			double price, double price_discount, int typeid, String slug, int brandid, Date created_on_utc,
-			Date updated_on_utc, int discount, String manufacturer, int article_number, String delivery_time,
-			String availabilty, String trademark, String product_number, String origin, String machine,
-			String dial_thickness, String dial_diameter, String glasses, String strap, int waterproof,
-			String especially, String insurance, String reviews, String pair, String delivery, String img1, String img2,
-			String img3, String img4, String address, int sold, String cate) {
-		super();
-		this.name = name;
-		this.image = image;
-		this.categoryid = categoryid;
-		this.short_description = short_description;
-		this.full_description = full_description;
-		this.price = price;
-		this.price_discount = price_discount;
-		this.typeid = typeid;
-		this.slug = slug;
-		this.brandid = brandid;
-		this.created_on_utc = created_on_utc;
-		this.updated_on_utc = updated_on_utc;
-		this.discount = discount;
-		this.manufacturer = manufacturer;
-		this.article_number = article_number;
-		this.delivery_time = delivery_time;
-		this.availabilty = availabilty;
-		this.trademark = trademark;
-		this.product_number = product_number;
-		this.origin = origin;
-		this.machine = machine;
-		this.dial_thickness = dial_thickness;
-		this.dial_diameter = dial_diameter;
-		this.glasses = glasses;
-		this.strap = strap;
-		this.waterproof = waterproof;
-		this.especially = especially;
-		this.insurance = insurance;
-		this.reviews = reviews;
-		this.pair = pair;
-		this.delivery = delivery;
-		this.img1 = img1;
-		this.img2 = img2;
-		this.img3 = img3;
-		this.img4 = img4;
-		this.address = address;
-		this.sold = sold;
-		this.cate = cate;
-	}
-	
 	public long getId() {
 		return id;
 	}

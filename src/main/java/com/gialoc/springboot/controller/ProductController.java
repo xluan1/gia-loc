@@ -28,7 +28,6 @@ import com.gialoc.springboot.repository.ProductRepository;
 @CrossOrigin
 @RestController
 @RequestMapping("/api")
-
 public class ProductController {
 
 	@Autowired
@@ -63,7 +62,7 @@ public class ProductController {
 
 	// save products
 	@PostMapping("/products")
-	ResponseEntity<ResponseObject> inserProduct(@RequestBody Product newProduct) {
+	ResponseEntity<ResponseObject> insertProduct(@RequestBody Product newProduct) {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new ResponseObject("ok", "Post Product successfully", productRepository.save(newProduct)));
 	}
