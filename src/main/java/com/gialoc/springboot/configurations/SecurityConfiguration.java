@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -51,7 +50,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/api/brand",
                         "/api/brand/*",
                         "/api/category",
-                        "/api/category/*")
+                        "/api/category/*",
+                        "/api/order")
                 .permitAll()
                 .anyRequest()
                 .authenticated();

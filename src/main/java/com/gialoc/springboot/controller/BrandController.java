@@ -1,5 +1,6 @@
 package com.gialoc.springboot.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,7 @@ public class BrandController {
 	// save brand
 	@PostMapping("/brand")
 	ResponseEntity<ResponseObject> inserBrand(@RequestBody Brand newBrand) {
+		newBrand.setCreated_on_utc(new Date());
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new ResponseObject("ok", "Post Brand successfully", brandRepository.save(newBrand)));
 	}
@@ -59,7 +61,6 @@ public class BrandController {
 			oldBrand.setName(brand.getName());
 			oldBrand.setImage(brand.getImage());
 			oldBrand.setSlug(brand.getSlug());
-			oldBrand.setCreated_on_utc(brand.getCreated_on_utc());
 			oldBrand.setUpdate_on_utc(brand.getUpdate_on_utc());
 			return brandRepository.save(oldBrand);
 		}).orElseGet(() -> {

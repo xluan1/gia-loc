@@ -3,6 +3,8 @@ package com.gialoc.springboot.service.user;
 import com.gialoc.springboot.model.User;
 import com.gialoc.springboot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,5 +22,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAllAccounts() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public User getCurrentUser() {
+        Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
+        if (currentAuth != null) {
+            return findAccountByEmail(currentAuth.getName());
+        }
+        return null;
     }
 }

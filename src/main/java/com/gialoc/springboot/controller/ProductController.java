@@ -1,6 +1,8 @@
 package com.gialoc.springboot.controller;
+
 import org.springframework.data.domain.Sort;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,83 +32,85 @@ import com.gialoc.springboot.repository.ProductRepository;
 @RequestMapping("/api")
 public class ProductController {
 
-	@Autowired
-	private ProductRepository productRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
-	// get products
-	@GetMapping("/products")
-	public List<Product> getAllProduct() {
-		return this.productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-	}
+    // get products
+    @GetMapping("/products")
+    public List<Product> getAllProduct() {
+        return this.productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
 
-	// get products by id
-	@GetMapping("/products/{id}")
-	public ResponseEntity<Product> getProductById(@PathVariable(value = "id") Long productId)
-			throws ResourceNotFoundException {
-		Product product = productRepository.findById(productId)
-				.orElseThrow(() -> new ResourceNotFoundException("Product not found for this id :: " + productId));
-		return ResponseEntity.ok().body(product);
-	}
+    // get products by id
+    @GetMapping("/products/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable(value = "id") Long productId)
+            throws ResourceNotFoundException {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found for this id :: " + productId));
+        return ResponseEntity.ok().body(product);
+    }
 
-	// get products by categoryid
-	@GetMapping("/v1/products/{categoryid}")
-	    	List<Product> findByCategoryid(@PathVariable int categoryid) {
-				return productRepository.findByCategoryid(categoryid);
-	    }
-	
-	// get products by brandid
-		@GetMapping("/v2/products/{brandid}")
-		    	List<Product> findByBrandid(@PathVariable int brandid) {
-					return productRepository.findByBrandid(brandid);
-		    }
+    // get products by categoryid
+    @GetMapping("/v1/products/{categoryid}")
+    List<Product> findByCategoryid(@PathVariable int categoryid) {
+        return productRepository.findByCategoryid(categoryid);
+    }
 
-	// save products
-	@PostMapping("/products")
-	ResponseEntity<ResponseObject> insertProduct(@RequestBody Product newProduct) {
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(new ResponseObject("ok", "Post Product successfully", productRepository.save(newProduct)));
-	}
+    // get products by brandid
+    @GetMapping("/v2/products/{brandid}")
+    List<Product> findByBrandid(@PathVariable int brandid) {
+        return productRepository.findByBrandid(brandid);
+    }
 
-	// update products
-	@PutMapping("/products/{id}")
-	public ResponseEntity<ResponseObject> updateProduct(@PathVariable Long id, @RequestBody Product product) {
-		Product updateProduct = productRepository.findById(id).map(oldProduct -> {
-			oldProduct.setName(product.getName());
-			oldProduct.setImage(product.getImage());
-			oldProduct.setShort_description(product.getShort_description());			
-			oldProduct.setTrademark(product.getTrademark());
-			oldProduct.setCate(product.getCate());
-			oldProduct.setOrigin(product.getOrigin());
-			oldProduct.setPrice(product.getPrice());
-			oldProduct.setDiscount(product.getDiscount());
-			oldProduct.setInsurance(product.getInsurance());
-			return productRepository.save(oldProduct);
-		}).orElseGet(() -> {
-			product.setId(id);
-			return productRepository.save(product);
-		});
+    // save products
+    @PostMapping("/products")
+    ResponseEntity<ResponseObject> insertProduct(@RequestBody Product newProduct) {
+        newProduct.setCreated_on_utc(new Date());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("ok", "Post Product successfully", productRepository.save(newProduct)));
+    }
 
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(new ResponseObject("ok", "Update Product successfully", updateProduct));
-	}
+    // update products
+    @PutMapping("/products/{id}")
+    public ResponseEntity<ResponseObject> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        Product updateProduct = productRepository.findById(id).map(oldProduct -> {
+            oldProduct.setName(product.getName());
+            oldProduct.setImage(product.getImage());
+            oldProduct.setShort_description(product.getShort_description());
+            oldProduct.setTrademark(product.getTrademark());
+            oldProduct.setCate(product.getCate());
+            oldProduct.setOrigin(product.getOrigin());
+            oldProduct.setPrice(product.getPrice());
+            oldProduct.setDiscount(product.getDiscount());
+            oldProduct.setInsurance(product.getInsurance());
+            oldProduct.setUpdated_on_utc(new Date());
+            return productRepository.save(oldProduct);
+        }).orElseGet(() -> {
+            product.setId(id);
+            return productRepository.save(product);
+        });
 
-	// delete products
-	@DeleteMapping("products/{id}")
-	public Map<String, Boolean> deleteProduct(@PathVariable(value = "id") Long productId)
-			throws ResourceNotFoundException {
-		Product product = productRepository.findById(productId)
-				.orElseThrow(() -> new ResourceNotFoundException("Product not found for this id :: " + productId));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("ok", "Update Product successfully", updateProduct));
+    }
 
-		this.productRepository.delete(product);
+    // delete products
+    @DeleteMapping("products/{id}")
+    public Map<String, Boolean> deleteProduct(@PathVariable(value = "id") Long productId)
+            throws ResourceNotFoundException {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found for this id :: " + productId));
 
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
+        this.productRepository.delete(product);
 
-		return response;
-	}
-	
-	@GetMapping("/search")
-	public List<Product> findAll(@RequestParam Optional<String> name) {
-		return productRepository.findByName(name.orElse(null));
-	}
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+
+        return response;
+    }
+
+    @GetMapping("/search")
+    public List<Product> findAll(@RequestParam Optional<String> name) {
+        return productRepository.findByName(name.orElse(null));
+    }
 }

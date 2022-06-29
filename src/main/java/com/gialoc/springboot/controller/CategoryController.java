@@ -1,5 +1,6 @@
 package com.gialoc.springboot.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,7 @@ public class CategoryController {
 	// save category
 	@PostMapping("/category")
 	ResponseEntity<ResponseObject> inserCategory(@RequestBody Category newCategory) {
+		newCategory.setCreated_on_utc(new Date());
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new ResponseObject("ok", "Post Category successfully", categoryRepository.save(newCategory)));
 	}
@@ -60,8 +62,7 @@ public class CategoryController {
 			oldCategory.setName(category.getName());
 			oldCategory.setImage(category.getImage());
 			oldCategory.setSlug(category.getSlug());
-			oldCategory.setCreated_on_utc(category.getCreated_on_utc());
-			oldCategory.setUpdate_on_utc(category.getUpdate_on_utc());
+			oldCategory.setUpdate_on_utc(new Date());
 			return categoryRepository.save(oldCategory);
 		}).orElseGet(() -> {
 			category.setId(id);
